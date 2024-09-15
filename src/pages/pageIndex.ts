@@ -1,4 +1,4 @@
 import InsuranceForm from "./InsuranceForm";
-import DailyTowing from "./DailyTowing";
+import InsuranceList from "./InsuranceList";
 
-export { InsuranceForm, DailyTowing };
+export { InsuranceForm, InsuranceList };

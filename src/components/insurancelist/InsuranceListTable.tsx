@@ -37,7 +37,7 @@ import ButtonSpinner from "../ui/ButtonSpinner";
 import { dailytowingData } from "@/dummydata/dailytowingData";
 import { useSelector } from "react-redux";
 
-const DailyTowingTable = () => {
+const InsuranceListTable = () => {
   const isDarkMode = useSelector((state) => state.global.isDarkMode);
   const [loading, setLoading] = useState(true);
 
@@ -337,4 +337,4 @@ const DailyTowingTable = () => {
   );
 };
 
-export default DailyTowingTable;
+export default InsuranceListTable;

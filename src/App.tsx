@@ -4,7 +4,7 @@ import {
   RouterProvider,
   useLocation,
 } from "react-router-dom";
-import { DailyTowing, InsuranceForm } from "./pages/pageIndex";
+import { InsuranceForm, InsuranceList } from "./pages/pageIndex";
 import { useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
@@ -60,8 +60,8 @@ function App() {
           element: <InsuranceForm />,
         },
         {
-          path: "/dailytowing",
-          element: <DailyTowing />,
+          path: "/insurancelist",
+          element: <InsuranceList />,
         },
       ],
     },

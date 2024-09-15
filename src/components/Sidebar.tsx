@@ -95,7 +95,7 @@ const Sidebar = () => {
           isCollapsed={isSidebarCollapsed}
         />
         <SidebarLink
-          href="/dailytowing"
+          href="/insurancelist"
           icon={CiViewTable}
           label="Insurance List"
           isCollapsed={isSidebarCollapsed}
