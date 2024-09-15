@@ -1,27 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { updatePersonalDetailsAsync } from "../profileSlice/profileSlice";
 import { RootState } from "@/app/store";
 import toast from "react-hot-toast";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -42,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Inputs = {
   first_name: string;
@@ -69,64 +50,6 @@ type Inputs = {
   presentation_skill: number;
 };
 
-type PosCode = {
-  value: string;
-  label: string;
-  sales_name: string;
-  zm_name: string;
-  nh_name: string;
-  dm_name: string;
-  vertical: string;
-};
-
-const posCodeData: PosCode[] = [
-  {
-    value: "POSLGO2520",
-    label: "POSLGO2520",
-    sales_name: "John Doe",
-    zm_name: "XYZ Mathew",
-    nh_name: "EMILLY",
-    dm_name: "Unkown",
-    vertical: "Direct SW",
-  },
-  {
-    value: "XYZKI92350",
-    label: "XYZKI92350",
-    sales_name: "Deepka Yadav",
-    zm_name: "",
-    nh_name: "AKash",
-    dm_name: "Priyanka",
-    vertical: "Direct SW",
-  },
-  {
-    value: "SLKHS612718",
-    label: "SLKHS612718",
-    sales_name: "Akshay Kumar",
-    zm_name: "XYZ Mathew",
-    nh_name: "EMILLY",
-    dm_name: "Unkown",
-    vertical: "Direct SW",
-  },
-  {
-    value: "HGSBA99823",
-    label: "HGSBA99823",
-    sales_name: "Ashish A Singh",
-    zm_name: "abc",
-    nh_name: "Hardik",
-    dm_name: "Seema",
-    vertical: "SW",
-  },
-  {
-    value: "GASVD42518",
-    label: "GASVD42518",
-    sales_name: "Juliee",
-    zm_name: "XYZ Mathew",
-    nh_name: "Saif Shaikh",
-    dm_name: "Dinesh sir",
-    vertical: "Direct SW",
-  },
-];
-
 const FormSchema = z.object({
   vehiclemake: z.string({
     required_error: "required",
@@ -140,58 +63,57 @@ const FormSchema = z.object({
   vertical: z.string({
     required_error: "required",
   }),
-  vehiclesubmodel: z.string({
-    required_error: "required",
-  }),
-  seatingcapacity: z.string({
-    required_error: "reuired",
-  }),
-  cc: z.string({
-    required_error: "reuired",
-  }),
-  cngfitted: z.string({
-    required_error: "Please select Insurer",
-  }),
+  vehiclesubmodel: z.string().optional(),
+  seatingcapacity: z.string().optional(),
+  cc: z.string().optional(),
+  cngfitted: z.string().optional(),
   registrationno: z.string({
     required_error: "required",
   }),
   rto: z.string({
-    required_error: "Please select Insurer",
+    required_error: "Please select rto",
   }),
-  mfgdate: z.string({
-    required_error: "required",
-  }),
+  mfgdate: z.string().optional(),
   regdate: z.string({
     required_error: "required",
   }),
-  agevehicle: z.string({
+  agevehicle: z.string().optional(),
+  engineno: z.string().optional(),
+  classicno: z.string().optional(),
+  ownership: z.string({
     required_error: "required",
   }),
-  engineno: z.string({
+  insurername: z.string({
+    required_error: "Please select a name",
+  }),
+  policybookedloc: z.string().optional(),
+  portaluserid: z.string({
     required_error: "required",
   }),
-  classicno: z.string({
+  productname: z.string({
     required_error: "required",
   }),
-  vehicletype: z.string({
-    required_error: "Please select a type",
-  }),
-  vehiclecategory: z.string({
-    required_error: "Please select a type",
-  }),
-  subbusinesstypevehicle: z.string({
-    required_error: "Please select a type",
-  }),
-  poscode: z.string({
+  netliability: z.string({
     required_error: "required",
   }),
+  liabilitygst: z.string({
+    required_error: "required",
+  }),
+  liabiltypremium: z.string().optional(),
+  otherliabilitypremium: z.string().optional(),
+  pacover: z.string().optional(),
+
+  premiumwithoutgst: z.string().optional(),
+  totalgstamount: z.string({
+    required_error: "required",
+  }),
+  totalpremium: z.string().optional(),
+  hypothecation: z.string().optional(),
+  deprecation: z.string().optional(),
 });
 
 const VehiclePolicy = () => {
   const dispatch = useDispatch<any>();
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [posCode, setPosCode] = React.useState<PosCode | null>(null);
 
   const isDarkMode = useSelector((state) => state.global.isDarkMode);
 
@@ -229,317 +151,291 @@ const VehiclePolicy = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="grid w-full lg:gap-3 gap-1.5"
             >
-              <div className="w-full grid md:grid-cols-3 grid-cols-1 md:gap-3 gap-1.5">
-                <FormField
-                  control={form.control}
-                  name="vehiclemake"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Make: </FormLabel>
-                      <FormControl>
-                        <Input type="text" placeholder="xyz" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="vehiclemodel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Model: </FormLabel>
-                      <FormControl>
-                        <Input type="text" placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="fueltype"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Fuel Type: </FormLabel>
-                      <FormControl>
-                        <Input type="text" placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="vehiclesubmodel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Sub Model: </FormLabel>
-                      <FormControl>
-                        <Input type="text" placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="seatingcapacity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Seating Capacity: </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={1}
-                          max={8}
-                          placeholder=""
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="cc"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>CC: </FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="cngfitted"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>CNG Fitted: </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+              <div className="my-4 pt-6 px-4 pb-4 rounded-lg relative border border-solid border-[#d1d1d1] shadow-inner-custom">
+                <h3 className="absolute top-[-15px] bg-[#4ab0fd] text-[0.9rem] p-[0.3rem] rounded-sm shadow-md">
+                  Vehicle Details
+                </h3>
+                <div className="w-full grid md:grid-cols-3 grid-cols-1 md:gap-3 gap-1.5">
+                  <FormField
+                    control={form.control}
+                    name="vehiclemake"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Vehicle Make: <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
+                          <Input type="text" placeholder="xyz" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="No">No</SelectItem>
-                          <SelectItem value="Yes">Yes</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="registrationno"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Registration No: </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="AtVN2637"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="rto"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>RTO: </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="vehiclemodel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Vehicle Model:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
+                          <Input type="text" placeholder="" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Davangre">Davangre</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mfgdate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Date of Mfg: </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="month"
-                          {...field}
-                          className={`${isDarkMode ? "bg-slate-700" : ""}`}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="regdate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Registraion of Date: </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="date"
-                          {...field}
-                          className={`${isDarkMode ? "bg-slate-700" : ""}`}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="agevehicle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Age of Vehicle: </FormLabel>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="w-full grid md:grid-cols-3 grid-cols-1 md:gap-3 gap-1.5">
-                <FormField
-                  control={form.control}
-                  name="engineno"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Engine Number: </FormLabel>
-                      <FormControl>
-                        <Input type="text" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="classicno"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Classic Number: </FormLabel>
-                      <FormControl>
-                        <Input type="text" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="rto"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Has the vehicle ownership been changed inlast 12 Months?{" "}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="fueltype"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Fuel Type: <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
+                          <Input type="text" placeholder="" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="No">No</SelectItem>
-                          <SelectItem value="Yes">Yes</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="vehiclesubmodel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Vehicle Sub Model: </FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="seatingcapacity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Seating Capacity: </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={1}
+                            max={8}
+                            placeholder=""
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="cc"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>CC: </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="cngfitted"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>CNG Fitted: </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="No">No</SelectItem>
+                            <SelectItem value="Yes">Yes</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="registrationno"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Registration No:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="AtVN2637"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="rto"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          RTO: <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Davangre">Davangre</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="mfgdate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Date of Mfg: </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="month"
+                            {...field}
+                            className={`${isDarkMode ? "bg-slate-700" : ""}`}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="regdate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Registraion of Date:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...field}
+                            className={`${isDarkMode ? "bg-slate-700" : ""}`}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="agevehicle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Age of Vehicle: </FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="engineno"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Engine Number: </FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="classicno"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Classic Number: </FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="ownership"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Has the vehicle ownership been changed in last 12
+                          Months? <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="No">No</SelectItem>
+                            <SelectItem value="Yes">Yes</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
               <hr className="bg-gray-800" />
-              <div className="w-full grid md:grid-cols-2 grid-cols-1 md:gap-3 gap-1.5">
-                <div className="flex flex-col gap-0.5">
-                  <div>
-                    <Label>Tracker Number: </Label>
-                    <p className="font-bold bg-yellow-300 py-1 px-3 w-fit">
-                      MTL/BG3/1291/XYZ0000123
-                    </p>
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="isfleet"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-2">
-                        <FormLabel className="mt-1">Is Fleet Case?</FormLabel>
-                        <FormControl>
-                          <Input type="checkbox" {...field} className="w-fit" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={form.control}
-                  name="modeoflogin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mode of Login: </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="online">Online</SelectItem>
-                          <SelectItem value="offline">Offline</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
               <div className="my-4 pt-6 px-4 pb-4 rounded-lg relative border border-solid border-[#d1d1d1] shadow-inner-custom">
-                <h3 className="absolute top-[-15px] bg-gray-300 text-[0.9rem] p-[0.3rem] rounded-sm shadow-md">
-                  Proposal Details
+                <h3 className="absolute top-[-15px] bg-[#fd4ac7] text-[0.9rem] p-[0.3rem] rounded-sm shadow-md">
+                  Policy Details
                 </h3>
-                <div className="w-full grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 md:gap-3 gap-1.5">
+                <div className="w-full grid md:grid-cols-3 grid-cols-1 md:gap-3 gap-1.5">
                   <FormField
                     control={form.control}
-                    name="vehicletype"
+                    name="insurername"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Vehicle Type: </FormLabel>
+                        <FormLabel>
+                          Insurer Name: <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -550,10 +446,11 @@ const VehiclePolicy = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Miscellaneous">
-                              Miscellaneous
+                            <SelectItem value="Actify PVT LTD">
+                              Actify PVT LTD
                             </SelectItem>
-                            <SelectItem value="Others">Others</SelectItem>
+                            <SelectItem value="TCS">TCS</SelectItem>
+                            <SelectItem value="Infosys">Infosys</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -562,10 +459,10 @@ const VehiclePolicy = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="vehiclecategory"
+                    name="policybookedloc"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Vehicle Category: </FormLabel>
+                        <FormLabel>Policy Booked Loctaion: </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -576,10 +473,8 @@ const VehiclePolicy = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="MISC-D-Tractor">
-                              MISC-D-Tractor
-                            </SelectItem>
-                            <SelectItem value="Others">Others</SelectItem>
+                            <SelectItem value="Hubliy">Hubliy</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -588,127 +483,237 @@ const VehiclePolicy = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="subbusinesstypevehicle"
+                    name="portaluserid"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Sub Business Type: </FormLabel>
+                        <FormLabel>
+                          Portal UserId:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a sub-business type" />
+                              <SelectValue placeholder="Select" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="usedrollover">
-                              Used Rollover
+                            <SelectItem value="1256AADFG">1256AADFG</SelectItem>
+                            <SelectItem value="1452RETRCV">
+                              1452RETRCV
                             </SelectItem>
-                            <SelectItem value="rollover">Rollover</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-              </div>
-              <div className="my-4 pt-6 px-4 pb-4 rounded-lg relative border border-solid border-[#d1d1d1] shadow-inner-custom">
-                <h3 className="absolute top-[-15px] bg-gray-300 text-[0.9rem] p-[0.3rem] rounded-sm shadow-md">
-                  Sales Details
-                </h3>
-                <div className="w-full grid md:grid-cols-2 grid-cols-1 md:gap-3 gap-1.5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="poscode"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col gap-1">
-                          <FormLabel>POS Code: </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="productname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Product Name: <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
-                            {isDesktop ? (
-                              <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    className="w-full justify-start"
-                                  >
-                                    {posCode ? (
-                                      <>{posCode.label}</>
-                                    ) : (
-                                      <>BSJ0XXXX</>
-                                    )}
-                                  </Button>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                  className="w-full p-0"
-                                  align="start"
-                                >
-                                  <PosCodeList
-                                    setOpen={setOpen}
-                                    setPosCode={setPosCode}
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                            ) : (
-                              <Drawer open={open} onOpenChange={setOpen}>
-                                <DrawerTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    className="w-full justify-start"
-                                  >
-                                    {posCode ? (
-                                      <>{posCode.label}</>
-                                    ) : (
-                                      <>BSJ0XXXX</>
-                                    )}
-                                  </Button>
-                                </DrawerTrigger>
-                                <DrawerContent>
-                                  <div className="mt-4 border-t p-1.5 max-h-[40vh]">
-                                    <ScrollArea />
-                                    <PosCodeList
-                                      setOpen={setOpen}
-                                      setPosCode={setPosCode}
-                                    />
-                                  </div>
-                                </DrawerContent>
-                              </Drawer>
-                            )}
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <h5 className="my-1 text-blue-800">
-                      {posCode?.sales_name}
-                    </h5>
-                  </div>
-                  {posCode && (
-                    <div
-                      className={`${
-                        isDarkMode ? "bg-blue-200" : "bg-yellow-200"
-                      } p-3 rounded mt-2 md:mt-0`}
-                    >
-                      <div>
-                        <Label>ZM Name:</Label>
-                        <span className="px-1">{posCode?.zm_name}</span>
-                      </div>
-                      <div>
-                        <Label>NH Name:</Label>
-                        <span className="px-1">{posCode?.nh_name}</span>
-                      </div>
-                      <div>
-                        <Label>DM Name:</Label>
-                        <span className="px-1">{posCode?.dm_name}</span>
-                      </div>
-                      <div>
-                        <Label>Vertical:</Label>
-                        <span className="px-1">{posCode?.vertical}</span>
-                      </div>
-                    </div>
-                  )}
+                          <SelectContent>
+                            <SelectItem value="HR">HR</SelectItem>
+                            <SelectItem value="CMS">CMS</SelectItem>
+                            <SelectItem value="ERP">ERP</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="netliability"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Net Liabaility Premium:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="liabilitygst"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Liability GST Rate(%):{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="More Than 18%">
+                              More Than 18%
+                            </SelectItem>
+                            <SelectItem value="Less Than 18%">
+                              Less Than 18%
+                            </SelectItem>
+                            <SelectItem value="18%">18%</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="liabiltypremium"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Liability Premium: </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="otherliabilitypremium"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Other Liability Premimum: </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="pacover"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>PA Cover: </FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="premiumwithoutgst"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Premium without GST: </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="totalgstamount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Total GST Amount:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="totalpremium"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Total Premium: </FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="hypothecation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hypothecation: </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="No">No</SelectItem>
+                            <SelectItem value="Yes">Yes</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="deprecation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Deprecation </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="No">No</SelectItem>
+                            <SelectItem value="Yes">Yes</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
               <Button type="submit" className="w-fit">
@@ -721,39 +726,5 @@ const VehiclePolicy = () => {
     </div>
   );
 };
-
-function PosCodeList({
-  setOpen,
-  setPosCode,
-}: {
-  setOpen: (open: boolean) => void;
-  setPosCode: (posCode: PosCode | null) => void;
-}) {
-  return (
-    <Command>
-      <CommandInput placeholder="Filter posCode..." />
-      <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup>
-          {posCodeData.map((posCode) => (
-            <CommandItem
-              key={posCode.value}
-              value={posCode.value}
-              onSelect={(value) => {
-                setPosCode(
-                  posCodeData.find((priority) => priority.value === value) ||
-                    null
-                );
-                setOpen(false);
-              }}
-            >
-              {posCode.label}
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </Command>
-  );
-}
 
 export default VehiclePolicy;

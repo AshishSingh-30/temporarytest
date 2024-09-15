@@ -39,8 +39,8 @@ function App() {
       >
         <Sidebar />
         <div
-          className={`flex flex-col w-full h-full md:py-7 md:px-9 p-4 bg-gray-50 ${
-            isSidebarCollapsed ? "md:pl-24" : "md:pl-72"
+          className={`flex flex-col w-full h-full md:py-7 md:px-6 p-4 bg-gray-50 ${
+            isSidebarCollapsed ? "md:pl-20" : "md:pl-[17rem]"
           }`}
         >
           <Navbar />

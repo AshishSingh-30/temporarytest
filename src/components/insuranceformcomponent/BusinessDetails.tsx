@@ -134,18 +134,14 @@ const FormSchema = z.object({
   subbusinesstype: z.string({
     required_error: "Please select sub-business type",
   }),
-  producttype: z.string({
-    required_error: "Please select product type",
-  }),
+  producttype: z.string().optional(),
   vertical: z.string({
     required_error: "required",
   }),
   salesbranch: z.string({
     required_error: "Please select sales branch",
   }),
-  salessubbranch: z.string({
-    required_error: "required",
-  }),
+  salessubbranch: z.string().optional(),
   sourceby: z.string({
     required_error: "required",
   }),
@@ -167,18 +163,14 @@ const FormSchema = z.object({
   modeoflogin: z.string({
     required_error: "required",
   }),
-  isfleet: z.string({
-    required_error: "required",
-  }),
+  isfleet: z.string().optional(),
   vehicletype: z.string({
     required_error: "Please select a type",
   }),
   vehiclecategory: z.string({
     required_error: "Please select a type",
   }),
-  subbusinesstypevehicle: z.string({
-    required_error: "Please select a type",
-  }),
+  subbusinesstypevehicle: z.string().optional(),
   poscode: z.string({
     required_error: "required",
   }),
@@ -232,7 +224,9 @@ const BusinessDetails = () => {
                   name="businesstype"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Business Type: </FormLabel>
+                      <FormLabel>
+                        Business Type: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -256,7 +250,10 @@ const BusinessDetails = () => {
                   name="subbusinesstype"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sub Business Type: </FormLabel>
+                      <FormLabel>
+                        Sub Business Type:{" "}
+                        <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -307,7 +304,9 @@ const BusinessDetails = () => {
                   name="vertical"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Vertical: </FormLabel>
+                      <FormLabel>
+                        Vertical: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -331,7 +330,9 @@ const BusinessDetails = () => {
                   name="salesbranch"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sales Barnch: </FormLabel>
+                      <FormLabel>
+                        Sales Barnch: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -383,7 +384,9 @@ const BusinessDetails = () => {
                   name="sourceby"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Source By: </FormLabel>
+                      <FormLabel>
+                        Source By: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -408,7 +411,9 @@ const BusinessDetails = () => {
                   name="rmcode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>RM Code: </FormLabel>
+                      <FormLabel>
+                        RM Code: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
@@ -421,7 +426,9 @@ const BusinessDetails = () => {
                   name="rmname"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>RM Name: </FormLabel>
+                      <FormLabel>
+                        RM Name: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <FormControl>
                         <Input type="text" placeholder="john" {...field} />
                       </FormControl>
@@ -434,7 +441,9 @@ const BusinessDetails = () => {
                   name="Insurer"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Insurer: </FormLabel>
+                      <FormLabel>
+                        Insurer: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -460,7 +469,9 @@ const BusinessDetails = () => {
                   name="reporteddate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Reported Date: </FormLabel>
+                      <FormLabel>
+                        Reported Date: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="date"
@@ -477,7 +488,9 @@ const BusinessDetails = () => {
                   name="reportedmonth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Reported Month: </FormLabel>
+                      <FormLabel>
+                        Reported Month: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="month"
@@ -518,7 +531,9 @@ const BusinessDetails = () => {
                   name="modeoflogin"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mode of Login: </FormLabel>
+                      <FormLabel>
+                        Mode of Login: <span className="text-red-600"> *</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -548,7 +563,9 @@ const BusinessDetails = () => {
                     name="vehicletype"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Vehicle Type: </FormLabel>
+                        <FormLabel>
+                          Vehicle Type: <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -574,7 +591,10 @@ const BusinessDetails = () => {
                     name="vehiclecategory"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Vehicle Category: </FormLabel>
+                        <FormLabel>
+                          Vehicle Category:{" "}
+                          <span className="text-red-600"> *</span>
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -634,7 +654,9 @@ const BusinessDetails = () => {
                       name="poscode"
                       render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                          <FormLabel>POS Code: </FormLabel>
+                          <FormLabel>
+                            POS Code: <span className="text-red-600"> *</span>
+                          </FormLabel>
                           <FormControl>
                             {isDesktop ? (
                               <Popover open={open} onOpenChange={setOpen}>
